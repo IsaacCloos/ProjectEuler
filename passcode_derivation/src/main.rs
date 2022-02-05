@@ -28,25 +28,27 @@ fn main() {
 // https://stackoverflow.com/a/69485860
 trait CodeReducers {
     fn shortest_code(source: String, target: String) -> String {
-        // no overlap [to be removed]
-        // if target.chars().filter(|tc| source.contains(*tc)).count() == 0 {
-        //     return format!("{source}{target}")
-        // }
-        // 'outer: for (ti, tc) in target.chars().enumerate() {
-        //     'inner: for (si, sc) in source.chars().enumerate() {
-        //         if tc == sc {
-        //             reduced_string.push(sc);
-        //             continue 'inner;
-        //         }
-        //         reduced_string.push(tc);
-        //     }
-        // }
-        let mut reduced_string = HashSet::<char>::new();
-        
-        'outer: for (si, sc) in source.chars().enumerate() {
-            'inner: for (ti, tc) in target.chars().enumerate() {
-                reduced_string.insert(sc);
-                reduced_string.insert(tc);
+        let mut reduced_string = source.chars().collect::<Vec<char>>();
+        let mut reference_index: Option<usize> = None;
+        'outer: for (ti, tc) in target.chars().enumerate() {
+            let mut integrated_target = false;
+            'inner: for (si, sc) in source.chars().enumerate() {
+                if sc == tc {
+                    integrated_target = true;
+                    if reference_index.is_none() {
+                        reference_index = Some(si);
+                    } else {
+                        
+                    }
+
+                    continue 'inner;
+                }
+            }
+            if !integrated_target {
+                reduced_string.push(tc);
+                if reference_index.is_none() {
+                    reference_index = Some(reduced_string.len() - 1);
+                }
             }
         }
 
@@ -64,3 +66,29 @@ fn import_keylog(file_path: &str) -> Vec<String> {
         .map(str::to_owned)
         .collect::<Vec<String>>()
 }
+
+// no overlap [to be removed]
+// if target.chars().filter(|tc| source.contains(*tc)).count() == 0 {
+//     return format!("{source}{target}")
+// }
+// 'outer: for (ti, tc) in target.chars().enumerate() {
+//     'inner: for (si, sc) in source.chars().enumerate() {
+//         if tc == sc {
+//             reduced_string.push(sc);
+//             continue 'inner;
+//         }
+//         reduced_string.push(tc);
+//     }
+// }
+
+// 'outer: for (si, sc) in source.chars().enumerate() {
+//     let mut integrated_target = false;
+//     'inner: for (ti, tc) in target.chars().enumerate() {
+//         if tc ==sc {
+//             integrated_target = true;
+//         }
+//     }
+//     if integrated_target {
+
+//     }
+// }
