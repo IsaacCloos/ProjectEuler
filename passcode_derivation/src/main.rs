@@ -1,4 +1,7 @@
-use std::fs;
+use std::{
+    collections::{HashMap, HashSet},
+    fs,
+};
 
 const FILE_PATH: &str = "p079_keylog.txt";
 
@@ -29,19 +32,25 @@ trait CodeReducers {
         // if target.chars().filter(|tc| source.contains(*tc)).count() == 0 {
         //     return format!("{source}{target}")
         // }
-        let mut reduced_string = String::new();
-
-        'outer: for (ti, tc) in target.chars().enumerate() {
-            'inner: for (si, sc) in source.chars().enumerate() {
-                if tc == sc {
-                    reduced_string.push(sc);
-                    continue 'inner;
-                }
-                reduced_string.push(tc);
+        // 'outer: for (ti, tc) in target.chars().enumerate() {
+        //     'inner: for (si, sc) in source.chars().enumerate() {
+        //         if tc == sc {
+        //             reduced_string.push(sc);
+        //             continue 'inner;
+        //         }
+        //         reduced_string.push(tc);
+        //     }
+        // }
+        let mut reduced_string = HashSet::<char>::new();
+        
+        'outer: for (si, sc) in source.chars().enumerate() {
+            'inner: for (ti, tc) in target.chars().enumerate() {
+                reduced_string.insert(sc);
+                reduced_string.insert(tc);
             }
         }
 
-        reduced_string
+        reduced_string.iter().collect() // inferred as functional output
     }
 }
 
