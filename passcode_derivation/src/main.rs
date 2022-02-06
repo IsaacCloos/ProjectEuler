@@ -1,3 +1,7 @@
+#![allow(unused_imports)]
+#![allow(unused_labels)]
+#![allow(unused_variables)]
+
 use std::{
     collections::{HashMap, HashSet},
     fs,
@@ -38,16 +42,25 @@ trait CodeReducers {
                     if reference_index.is_none() {
                         reference_index = Some(si);
                     } else {
-                        
+                        // if earlier number of target is after current char swap them
+                        if reference_index.unwrap() > si {
+                            reduced_string.swap(reference_index.unwrap(), si)
+                        }
                     }
 
+                    // saves time after/if match is found
                     continue 'inner;
                 }
             }
+            // new number to introduce
             if !integrated_target {
-                reduced_string.push(tc);
                 if reference_index.is_none() {
+                    reduced_string.push(tc);
                     reference_index = Some(reduced_string.len() - 1);
+                } else {
+                    let new_index = reference_index.unwrap() + 1;
+                    reduced_string.insert(new_index, tc);
+                    reference_index = Some(new_index);
                 }
             }
         }
