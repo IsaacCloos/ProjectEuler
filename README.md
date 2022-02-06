@@ -1,2 +1,12 @@
 # ProjectEuler
- Project Euler solutions
+ [Project Euler](https://projecteuler.net/) solutions.
+
+Legend [^1][^2][^3]
+
+[^1]: ✅ = accepted
+[^2]: 💬 = in progress
+[^3]: 🆘 = advice
+
+| Question | Title | State | Difficulty Rating
+| :- | :- | :-: | -: |
+| **79** | [Passcode derivation](https://projecteuler.net/problem=79) | ✅ | 5% |
