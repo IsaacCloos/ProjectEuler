@@ -22,11 +22,32 @@ Given that the three characters are always asked for in order, analyse the file 
 
 fn main() {
     let keys = import_keylog(FILE_PATH);
-
-    match keys.into_iter().reduce(String::shortest_code) {
-        Some(code) => println!("{code}"),
-        None => println!("Keys list is empty"),
+    let mut numbers: HashMap<u32, usize> = HashMap::new();
+    for number in 0..=9 {
+        let mut set: HashSet<u32> = HashSet::new();
+        for key in keys.iter() {
+            let key_chars = key.chars();
+            for c in key_chars {
+                let digit = c.to_digit(10).unwrap();
+                if digit > number {
+                    set.insert(digit);
+                }
+            }
+        }
+        numbers.insert(number, set.len());
     }
+
+    
+    let mut result = numbers.iter().collect::<Vec<(&u32, &usize)>>();
+    result.sort_by(|a, b| a.1.cmp(b.1));
+    for elm in result {
+        print!("{}", elm.0)
+    }
+
+    // match keys.into_iter().reduce(String::shortest_code) {
+    //     Some(code) => println!("{code}"),
+    //     None => println!("Keys list is empty"),
+    // }
 }
 
 // https://stackoverflow.com/a/69485860
