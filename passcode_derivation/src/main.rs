@@ -12,10 +12,8 @@ The text file, keylog.txt, contains fifty successful login attempts.
 Given that the three characters are always asked for in order, analyse the file so as to determine the shortest possible secret passcode of unknown length.
 */
 
-// key notions:
-// 1. shortest possible number to allow these all to be true. Not necessarily a number that exists already that will allow these all to be true.
-// - thinking about building a solution out of the combinations was the breakthrough for me
-
+// For each unique number in the entire set find how many unique numbers preceed it between all keys. Order your findings from least to greatest.
+// This will result in numbers that have an increasing number of unique values before it to be pushed further back until you have the output in the correct order.
 fn main() {
     let keys = import_keylog(FILE_PATH);
     let mut numbers: HashMap<char, HashSet<char>> = HashMap::new();
