@@ -5,7 +5,7 @@ Legend [^1][^2][^3]
 
 [^1]: ✅ = accepted
 [^2]: 💬 = in progress
-[^3]: 🆘 = advice
+[^3]: 🆘 = accepted with advice
 
 | Question | Title | State | Difficulty Rating
 | :- | :- | :-: | -: |
