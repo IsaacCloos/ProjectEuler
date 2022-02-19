@@ -1,4 +1,4 @@
-use std::fs;
+use std::{cmp, fs};
 
 // 80 rows of 80 numbers
 const INPUT_PATH: &str = "input.txt";
@@ -10,16 +10,39 @@ struct Point {
 
 type Matrix = Vec<Vec<i32>>;
 
+// fn main() {
+//     let matrix = get_data(INPUT_PATH);
+
+//     let start = Point { x: 0, y: 0 };
+
+//     let accumulated_total = 0;
+
+//     let smallest_path_total = walk(&start, &matrix, accumulated_total);
+
+//     println!("{smallest_path_total}")
+// }
+
 fn main() {
-    let matrix = get_data(INPUT_PATH);
+    let mut matrix = get_data(INPUT_PATH);
 
-    let start = Point { x: 0, y: 0 };
+    for i in (0..(matrix.len() - 2)).rev() {
+        *matrix.get_mut(i).unwrap().get_mut(79).unwrap() +=
+            *matrix.get(i + 1).unwrap().get(79).unwrap();
 
-    let accumulated_total = 0;
+        *matrix.get_mut(79).unwrap().get_mut(i).unwrap() +=
+            *matrix.get(79).unwrap().get(i + 1).unwrap();
+    }
 
-    let smallest_path_total = walk(&start, &matrix, accumulated_total);
+    for i in (0..(matrix.len() - 2)).rev() {
+        for j in (0..(matrix.len() - 2)).rev() {
+            *matrix.get_mut(j).unwrap().get_mut(i).unwrap() += cmp::min(
+                *matrix.get_mut(j).unwrap().get_mut(i + 1).unwrap(),
+                *matrix.get_mut(j + 1).unwrap().get_mut(i).unwrap(),
+            )
+        }
+    }
 
-    println!("{smallest_path_total}")
+    println!("{}", *matrix.get(0).unwrap().get(0).unwrap())
 }
 
 fn walk(point: &Point, matrix: &Matrix, accumulated_total: i32) -> i32 {
