@@ -1,83 +1,44 @@
+#![allow(unused_variables)]
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_mut)]
 use std::{cmp, fs};
 
 // 80 rows of 80 numbers
 const INPUT_PATH: &str = "input.txt";
 
-struct Point {
-    x: usize,
-    y: usize,
-}
-
 type Matrix = Vec<Vec<i32>>;
-
-// fn main() {
-//     let matrix = get_data(INPUT_PATH);
-
-//     let start = Point { x: 0, y: 0 };
-
-//     let accumulated_total = 0;
-
-//     let smallest_path_total = walk(&start, &matrix, accumulated_total);
-
-//     println!("{smallest_path_total}")
-// }
+type Point = (usize, usize);
 
 fn main() {
     let mut matrix = get_data(INPUT_PATH);
 
-    for i in (0..(matrix.len() - 2)).rev() {
-        *matrix.get_mut(i).unwrap().get_mut(79).unwrap() +=
-            *matrix.get(i + 1).unwrap().get(79).unwrap();
-
-        *matrix.get_mut(79).unwrap().get_mut(i).unwrap() +=
-            *matrix.get(79).unwrap().get(i + 1).unwrap();
-    }
-
-    for i in (0..(matrix.len() - 2)).rev() {
-        for j in (0..(matrix.len() - 2)).rev() {
-            *matrix.get_mut(j).unwrap().get_mut(i).unwrap() += cmp::min(
-                *matrix.get_mut(j).unwrap().get_mut(i + 1).unwrap(),
-                *matrix.get_mut(j + 1).unwrap().get_mut(i).unwrap(),
-            )
-        }
-    }
-
-    println!("{}", *matrix.get(0).unwrap().get(0).unwrap())
-}
-
-fn walk(point: &Point, matrix: &Matrix, accumulated_total: i32) -> i32 {
-    let new_total = accumulated_total + get_cell_value(&point, matrix);
-
-    let mut options = Vec::<Point>::new();
-
-    if (point.x + 1) != matrix.first().expect("matrix is empty").len() {
-        options.push(Point {
-            x: point.x + 1,
-            y: point.y,
-        })
-    }
-
-    if (point.y + 1) != matrix.len() {
-        options.push(Point {
-            x: point.x,
-            y: point.y + 1,
-        })
-    }
-
-    if options.is_empty() {
-        println!("returning total: {new_total}");
-        new_total
-    } else {
-        options
-            .iter()
-            .map(|p| walk(p, matrix, new_total))
-            .min()
-            .unwrap()
+    for i in (0..(matrix.len())).rev() {
+        println!("{i}")
     }
 }
 
-fn get_cell_value(point: &Point, matrix: &Matrix) -> i32 {
-    *matrix.get(point.y).unwrap().get(point.x).unwrap()
+trait TableFeatures {
+    fn get_value(&self, point: Point) -> i32;
+    fn set_value(&mut self, point: Point, value: i32);
+}
+
+impl TableFeatures for Matrix {
+    fn get_value(&self, point: Point) -> i32 {
+        *self
+            .get(point.1)
+            .expect("unable to access row")
+            .get(point.0)
+            .expect("unable to access column")
+    }
+
+    fn set_value(&mut self, point: Point, value: i32) {
+        *self
+            .get_mut(point.1)
+            .expect("unable to access row")
+            .get_mut(point.0)
+            .expect("unable to access column") = value;
+    }
 }
 
 fn get_data(input_path: &str) -> Matrix {
