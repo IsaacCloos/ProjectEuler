@@ -10,4 +10,4 @@ Legend [^1][^2][^3]
 | Question | Title | State | Difficulty Rating
 | :- | :- | :-: | -: |
 | **79** | [Passcode derivation](https://projecteuler.net/problem=79) | ✅ | 5% |
-| **81** | [Path sum: two ways](https://projecteuler.net/problem=81) | 💬 |  |
+| **81** | [Path sum: two ways](https://projecteuler.net/problem=81) | ✅ | 10% |
