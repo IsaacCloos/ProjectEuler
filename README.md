@@ -11,3 +11,4 @@ Legend [^1][^2][^3]
 | :- | :- | :-: | -: |
 | **79** | [Passcode derivation](https://projecteuler.net/problem=79) | ✅ | 5% |
 | **81** | [Path sum: two ways](https://projecteuler.net/problem=81) | ✅ | 10% |
+| **82** | [Path sum: three ways](https://projecteuler.net/problem=82) | ✅ | 20% |
