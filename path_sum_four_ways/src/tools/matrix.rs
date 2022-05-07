@@ -1,17 +1,19 @@
+// portals system to quickly leap from dissimilar types
+
 #[derive(Debug)]
 pub(crate) struct Matrix<T> {
     content: Vec<Vec<T>>,
 }
 
-pub(crate) trait Load {
-    fn from_string<const DELIMITER_COUNT: usize>(
-        content: String,
+pub(crate) trait Load<T> {
+    fn load<const DELIMITER_COUNT: usize>(
+        content: T,
         delimiter_set: [char; DELIMITER_COUNT],
     ) -> Self;
 }
 
-impl Load for Matrix<i32> {
-    fn from_string<const DELIMITER_COUNT: usize>(
+impl Load<String> for Matrix<i32> {
+    fn load<const DELIMITER_COUNT: usize>(
         content: String,
         delimiter_set: [char; DELIMITER_COUNT],
     ) -> Self {
