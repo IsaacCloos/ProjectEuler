@@ -1,16 +1,14 @@
 use std::fs;
-use crate::tools::matrix::{Load, Matrix};
+
+use tools::matrix::Matrix;
 mod tools;
 
 const DATA_PATH: &str = "matrix.txt";
 
 fn main() {
-    let unparsed_data = get_data_from_file(DATA_PATH);
-    let matrix = Matrix::load(unparsed_data, ['\n', ',']);
+    let unparsed_data = fs::read_to_string(DATA_PATH).expect("inaccurate DATA_PATH");
 
-    println!("{matrix:?}");
-}
+    let matrix = Matrix::<i32>::from(unparsed_data);
 
-fn get_data_from_file(path: &str) -> String {
-    fs::read_to_string(path).unwrap()
+    println!("{matrix:?}")
 }
