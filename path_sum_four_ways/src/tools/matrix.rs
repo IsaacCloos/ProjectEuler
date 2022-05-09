@@ -12,7 +12,12 @@ impl<T: std::str::FromStr> From<String> for Matrix<T> {
                 .split_whitespace()
                 .map(|line| {
                     line.split(',')
-                        .map(|s| s.trim().parse::<T>().ok().unwrap())
+                        .map(|s| {
+                            s.trim()
+                                .parse::<T>()
+                                .ok()
+                                .expect("Failed to parse generic type from &str.")
+                        })
                         .collect::<Vec<_>>()
                 })
                 .collect::<Vec<Vec<_>>>(),
