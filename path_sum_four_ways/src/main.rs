@@ -1,6 +1,6 @@
 use std::fs;
 
-use tools::matrix::Matrix;
+use tools::matrix::{Matrix, Table};
 mod tools;
 
 const DATA_PATH: &str = "matrix.txt";
@@ -8,7 +8,9 @@ const DATA_PATH: &str = "matrix.txt";
 fn main() {
     let unparsed_data = fs::read_to_string(DATA_PATH).expect("inaccurate DATA_PATH");
 
-    let matrix = Matrix::<i32>::from(unparsed_data);
+    let matrix = Matrix::<i32>::from_table_string(unparsed_data, ',');
 
-    println!("{matrix:?}")
+    println!("{}", matrix.get_origin());
+    println!("{}", matrix.get_end());
+    println!("{:?}", matrix.get_size());
 }
