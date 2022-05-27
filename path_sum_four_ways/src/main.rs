@@ -10,7 +10,7 @@ fn main() {
 
     let matrix = Matrix::<i32>::from_table_string(unparsed_data, ',');
 
-    println!("{}", matrix.get_origin());
+    println!("{}", matrix.get_start());
     println!("{}", matrix.get_end());
     println!("{:?}", matrix.get_size());
 }

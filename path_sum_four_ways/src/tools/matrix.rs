@@ -1,5 +1,3 @@
-// portals system to quickly leap from dissimilar types
-
 use std::{fmt::Display, str::FromStr};
 
 pub(crate) struct Matrix<T> {
@@ -23,10 +21,9 @@ where
 
 pub(crate) trait Table<T> {
     fn from_table_string(unparsed_string: String, delimiter: char) -> Self;
-    fn get_origin(&self) -> Cell<T>;
+    fn get_start(&self) -> Cell<T>;
     fn get_end(&self) -> Cell<T>;
     fn get_size(&self) -> (usize, usize);
-    
 }
 
 impl<T> Table<T> for Matrix<T>
@@ -51,7 +48,7 @@ where
         }
     }
 
-    fn get_origin(&self) -> Cell<T> {
+    fn get_start(&self) -> Cell<T> {
         Cell {
             x: 0,
             y: 0,
