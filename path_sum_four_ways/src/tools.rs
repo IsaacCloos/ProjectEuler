@@ -1,7 +1,9 @@
-use std::{fmt::Display, str::FromStr};
+use std::{fmt::Display, str::FromStr, vec};
 
+/// Logic layers require mutability
 pub(crate) struct Matrix<T> {
     content: Vec<Vec<T>>,
+    logic_layers: Vec<Vec<Vec<T>>>,
 }
 
 pub(crate) struct Cell<T> {
@@ -15,7 +17,11 @@ where
     T: Display,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} {} {}", self.x, self.y, self.val)
+        write!(
+            f,
+            "x index: {}\ny index: {}\npoint value: {}",
+            self.x, self.y, self.val
+        )
     }
 }
 
@@ -24,9 +30,11 @@ pub(crate) trait Table<T> {
     fn get_start(&self) -> Cell<T>;
     fn get_end(&self) -> Cell<T>;
     fn get_size(&self) -> (usize, usize);
+
+    // fn add_logic_layer(&mut self, logic: Fn(T) -> T);
 }
 
-impl<T> Table<T> for Matrix<T>
+impl<'a, T> Table<T> for Matrix<T>
 where
     T: FromStr + Copy,
 {
@@ -45,6 +53,7 @@ where
                         .collect::<Vec<_>>()
                 })
                 .collect::<Vec<Vec<_>>>(),
+            logic_layers: Vec::new(),
         }
     }
 
@@ -66,9 +75,16 @@ where
         }
     }
 
+    /// Returns x and y length of matrix respectively.
     fn get_size(&self) -> (usize, usize) {
         let x = self.content.len();
         let y = self.content[0].len();
         (x, y)
+    }
+}
+
+impl<T> Matrix<T> {
+    pub(crate) fn add_logic_layer(&mut self, _logic: fn(T) -> T) {
+        self.logic_layers.push(vec![vec![]]);
     }
 }
