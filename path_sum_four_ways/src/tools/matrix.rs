@@ -1,14 +1,22 @@
-use super::cell::Cell;
+use std::str::FromStr;
+
+use super::{cell::Cell, shape::Shape};
 
 /// Logic layers require mutability
-pub(crate) struct Matrix<T> {
+pub(crate) struct Matrix<T>
+where
+    T: FromStr,
+{
     pub(crate) content: Vec<Vec<T>>,
-    pub(crate) logic_layers: Vec<fn(T) -> T>,
+    // no reason to keep track of these in the matrix itself?
+    // pub(crate) logic_layers: HashMap<&'static str, fn(T) -> T>,
+
+    // pub(crate) logic_layers: Vec<fn(T) -> T>,
 }
 
 impl<T> Matrix<T>
 where
-    T: Copy,
+    T: Copy + FromStr,
 {
     /// First column of first row of matrix
     pub(crate) fn get_origin(&self) -> Cell<T> {
@@ -37,8 +45,41 @@ where
         }
     }
 
-
-    pub(crate) fn add_logic_layer(&mut self, logic: fn(T) -> T) {
-        self.logic_layers.push(logic);
+    pub(crate) fn snapshot<J: FromStr>(&self, lens: fn(T) -> J) -> Matrix<J> {
+        Matrix {
+            content: vec![Vec::<J>::new()],
+        }
     }
+
+    /// works off/with [Cell]
+    pub(crate) fn trace_layer(&self, convergence: usize) -> Vec<Cell<T>> {
+        
+    }
+
+    // pub(crate) fn add_logic_layer(&mut self, name: &'static str, logic: fn(T) -> T) {
+    //     self.logic_layers.insert(name, logic);
+    // }
+
+    // to come 
+
+    pub(crate) fn get_col_start(&self, col_index: usize) -> Cell<T> {
+        todo!()
+    }
+
+    pub(crate) fn get_col_end(&self, col_index: usize) -> Cell<T> {
+        todo!()
+    }
+
+    pub(crate) fn get_shape(&self) -> Shape {
+        todo!()
+    }
+
+    pub(crate) fn defragment(self) -> Self {
+        todo!()
+    }
+
+    pub(crate) fn normalize_empty_cells(&mut self) {
+        todo!()
+    }
+    
 }

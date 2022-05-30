@@ -24,7 +24,7 @@ where
                         .collect::<Vec<_>>()
                 })
                 .collect::<Vec<Vec<_>>>(),
-            logic_layers: Vec::new(),
+            // logic_layers: HashMap::new(),
         }
     }
 }
