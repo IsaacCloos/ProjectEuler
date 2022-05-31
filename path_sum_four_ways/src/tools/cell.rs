@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{str::FromStr, ops::Add, iter::Sum};
 
 use super::matrix::Matrix;
 
@@ -35,7 +35,7 @@ where
 /// walk to next layer
 pub(crate) fn get_exit_cell<T>(cell: &Cell<T>, matrix: &Matrix<T>, anchor: &Cell<T>) -> Option<Cell<T>>
 where
-    T: FromStr + Copy,
+    T: FromStr + Copy + Add<Output = T> + Ord + Sum
 {
     // referencing final layer (single value)
     if cell.x == anchor.x && cell.y == anchor.y {

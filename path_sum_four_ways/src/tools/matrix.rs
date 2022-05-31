@@ -1,6 +1,13 @@
-use std::str::FromStr;
+use std::{
+    ops::{Add, RangeInclusive},
+    str::FromStr, iter::Sum,
+};
 
-use super::{cell::Cell, cell::CellLayer, shape::Shape};
+use super::{
+    cell::Cell,
+    cell::{get_exit_cell, CellLayer, Layer},
+    shape::Shape,
+};
 
 /// Logic layers require mutability
 pub(crate) struct Matrix<T>
@@ -16,7 +23,7 @@ where
 
 impl<T> Matrix<T>
 where
-    T: Copy + FromStr,
+    T: Copy + FromStr + Add<Output = T> + Ord + Sum
 {
     /// First column of first row of matrix
     pub(crate) fn get_origin(&self) -> Cell<T> {
@@ -59,7 +66,42 @@ where
         }
     }
 
-    pub(crate) fn merge_val(&mut self, cell: &Cell<T>) {
+    pub(crate) fn get_layer_count(&self) -> usize {
+        self.content.len()
+    }
+
+    pub(crate) fn solve_layer(&self, layer: &mut CellLayer<T>) {
+        let anchor = layer.get_anchor();
+
+        let mut solves = Vec::<T>::new();
+
+        // loop through set
+        for (si, subject) in layer.iter().enumerate() {
+            let mut new_val = Vec::<T>::new();
+
+            //loop through other cells
+            for (ti, target) in layer.iter().enumerate() {
+                match get_exit_cell(target, self, &anchor) {
+                    Some(target_exit) => {
+                        let what = get_range_iter(si, ti);
+                        let target_cost =
+                            layer[what].to_vec().iter().map(|c| c.val).sum::<T>() + target_exit.val;
+
+                        new_val.push(target_cost);
+                    }
+                    None => (),
+                }
+            }
+
+            solves.push(new_val.into_iter().min().unwrap());
+        }
+
+        for (si, solution) in solves.iter().enumerate() {
+            layer[si].val = *solution;
+        }
+    }
+
+    pub(crate) fn set_cell(&mut self, cell: &Cell<T>) {
         self.content[cell.y][cell.x] = cell.val;
     }
 
@@ -115,5 +157,16 @@ where
 
     pub(crate) fn normalize_empty_cells(&mut self) {
         todo!()
+    }
+}
+
+fn get_range_iter<T>(start: T, end: T) -> RangeInclusive<T>
+where
+    T: PartialOrd,
+{
+    if start < end {
+        return start..=end;
+    } else {
+        return end..=start;
     }
 }
