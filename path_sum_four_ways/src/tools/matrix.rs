@@ -59,8 +59,20 @@ where
         }
     }
 
+    pub(crate) fn merge_val(&mut self, cell: &Cell<T>) {
+        self.content[cell.y][cell.x] = cell.val;
+    }
+
     pub(crate) fn get_layer(&self, convergence: usize) -> CellLayer<T> {
         let mut response = CellLayer::<T>::new();
+
+        for point in ((convergence + 1)..self.content.len()).rev() {
+            response.push(Cell {
+                x: convergence,
+                y: point,
+                val: self.content[point][convergence],
+            });
+        }
 
         response.push(Cell {
             x: convergence,
@@ -69,11 +81,6 @@ where
         });
 
         for point in (convergence + 1)..self.content.len() {
-            response.push(Cell {
-                x: convergence,
-                y: point,
-                val: self.content[point][convergence],
-            });
             response.push(Cell {
                 x: point,
                 y: convergence,
