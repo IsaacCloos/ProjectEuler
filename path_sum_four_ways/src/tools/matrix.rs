@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use super::{cell::Cell, shape::Shape};
+use super::{cell::Cell, cell::CellLayer, shape::Shape};
 
 /// Logic layers require mutability
 pub(crate) struct Matrix<T>
@@ -51,16 +51,44 @@ where
         }
     }
 
-    /// works off/with [Cell]
-    pub(crate) fn trace_layer(&self, convergence: usize) -> Vec<Cell<T>> {
-        
+    pub(crate) fn get_cell(&self, y: usize, x: usize) -> Cell<T> {
+        Cell {
+            x,
+            y,
+            val: self.content[y][x],
+        }
+    }
+
+    pub(crate) fn get_layer(&self, convergence: usize) -> CellLayer<T> {
+        let mut response = CellLayer::<T>::new();
+
+        response.push(Cell {
+            x: convergence,
+            y: convergence,
+            val: self.content[convergence][convergence],
+        });
+
+        for point in (convergence + 1)..self.content.len() {
+            response.push(Cell {
+                x: convergence,
+                y: point,
+                val: self.content[point][convergence],
+            });
+            response.push(Cell {
+                x: point,
+                y: convergence,
+                val: self.content[convergence][point],
+            });
+        }
+
+        response
     }
 
     // pub(crate) fn add_logic_layer(&mut self, name: &'static str, logic: fn(T) -> T) {
     //     self.logic_layers.insert(name, logic);
     // }
 
-    // to come 
+    // to come
 
     pub(crate) fn get_col_start(&self, col_index: usize) -> Cell<T> {
         todo!()
@@ -81,5 +109,4 @@ where
     pub(crate) fn normalize_empty_cells(&mut self) {
         todo!()
     }
-    
 }
